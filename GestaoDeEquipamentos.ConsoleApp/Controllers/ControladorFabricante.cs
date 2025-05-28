@@ -9,22 +9,18 @@ namespace GestaoDeEquipamentos.ConsoleApp.Controllers
     public class ControladorFabricante : Controller
     {
         [HttpGet("cadastrar")]
-        public Task ExibirFormularioCadastroFabricante()
+        public IActionResult ExibirFormularioCadastroFabricante([FromForm] string nome, [FromForm] string email, [FromForm] string telefone)
         {
             string conteudo = System.IO.File.ReadAllText("ModuloFabricante/Html/Cadastrar.html");
 
-            return HttpContext.Response.WriteAsync(conteudo);
+            return Content(conteudo, "text/html");
         }
 
         [HttpPost("cadastrar")]
-        public Task CadastrarFabricante()
+        public IActionResult CadastrarFabricante([FromForm] string nome, [FromForm] string email, [FromForm] string telefone)
         {
             ContextoDados contextoDados = new ContextoDados(true);
             IRepositorioFabricante repositorioFabricante = new RepositorioFabricanteEmArquivo(contextoDados);
-
-            string nome = HttpContext.Request.Form["nome"].ToString();
-            string email = HttpContext.Request.Form["email"].ToString();
-            string telefone = HttpContext.Request.Form["telefone"].ToString();
 
             Fabricante novoFabricante = new Fabricante(nome, email, telefone);
 
@@ -38,16 +34,14 @@ namespace GestaoDeEquipamentos.ConsoleApp.Controllers
 
             string conteudoString = sb.ToString();
 
-            return HttpContext.Response.WriteAsync(conteudoString);
+            return Content(conteudoString, "text/html");
         }
 
         [HttpGet("editar/{id:int}")]
-        public Task ExibirFormularioEdicaoFabricante()
+        public IActionResult ExibirFormularioEdicaoFabricante([FromRoute] int id)
         {
             ContextoDados contextoDados = new ContextoDados(true);
-            IRepositorioFabricante repositorioFabricante = new RepositorioFabricanteEmArquivo(contextoDados);
-
-            int id = Convert.ToInt32(HttpContext.GetRouteValue("id"));
+            IRepositorioFabricante repositorioFabricante = new RepositorioFabricanteEmArquivo(contextoDados);            
 
             Fabricante fabricanteSelecionado = repositorioFabricante.SelecionarRegistroPorId(id);
 
@@ -62,20 +56,14 @@ namespace GestaoDeEquipamentos.ConsoleApp.Controllers
 
             string conteudoString = sb.ToString();
 
-            return HttpContext.Response.WriteAsync(conteudoString);
+            return Content(conteudoString, "text/html");
         }
 
         [HttpPost("editar/{id:int}")]
-        public Task EditarFabricante()
-        {
-            int id = Convert.ToInt32(HttpContext.GetRouteValue("id"));
-
+        public IActionResult EditarFabricante([FromRoute] int id, [FromForm] string nome, [FromForm] string email, [FromForm] string telefone)
+        {            
             ContextoDados contextoDados = new ContextoDados(true);
             IRepositorioFabricante repositorioFabricante = new RepositorioFabricanteEmArquivo(contextoDados);
-
-            string nome = HttpContext.Request.Form["nome"].ToString();
-            string email = HttpContext.Request.Form["email"].ToString();
-            string telefone = HttpContext.Request.Form["telefone"].ToString();
 
             Fabricante fabricanteAtualizado = new Fabricante(nome, email, telefone);
 
@@ -89,16 +77,14 @@ namespace GestaoDeEquipamentos.ConsoleApp.Controllers
 
             string conteudoString = sb.ToString();
 
-            return HttpContext.Response.WriteAsync(conteudoString);
+            return Content(conteudoString, "text/html");
         }
 
         [HttpGet("excluir/{id:int}")]        
-        public Task ExibirFormularioExclusaoFabricante()
+        public IActionResult ExibirFormularioExclusaoFabricante([FromRoute] int id)
         {
             ContextoDados contextoDados = new ContextoDados(true);
-            IRepositorioFabricante repositorioFabricante = new RepositorioFabricanteEmArquivo(contextoDados);
-
-            int id = Convert.ToInt32(HttpContext.GetRouteValue("id"));
+            IRepositorioFabricante repositorioFabricante = new RepositorioFabricanteEmArquivo(contextoDados);            
 
             Fabricante fabricanteSelecionado = repositorioFabricante.SelecionarRegistroPorId(id);
 
@@ -111,14 +97,12 @@ namespace GestaoDeEquipamentos.ConsoleApp.Controllers
 
             string conteudoString = sb.ToString();
 
-            return HttpContext.Response.WriteAsync(conteudoString);
+            return Content(conteudoString, "text/html");
         }
 
         [HttpPost("excluir/{id:int}")]
-        public Task ExcluirFabricante()
-        {
-            int id = Convert.ToInt32(HttpContext.GetRouteValue("id"));
-
+        public IActionResult ExcluirFabricante([FromRoute] int id)
+        {           
             ContextoDados contextoDados = new ContextoDados(true);
             IRepositorioFabricante repositorioFabricante = new RepositorioFabricanteEmArquivo(contextoDados);
 
@@ -132,7 +116,7 @@ namespace GestaoDeEquipamentos.ConsoleApp.Controllers
 
             string conteudoString = sb.ToString();
 
-            return HttpContext.Response.WriteAsync(conteudoString);
+            return Content(conteudoString, "text/html");
         }
 
         [HttpGet("visualizar")]
