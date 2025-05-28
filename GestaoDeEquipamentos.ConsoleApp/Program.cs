@@ -1,5 +1,7 @@
 ﻿using GestaoDeEquipamentos.ConsoleApp.Compartilhado;
+using GestaoDeEquipamentos.ConsoleApp.ModuloFabricante;
 using GestaoDeEquipamentos.ConsoleApp.Util;
+using System.Text;
 
 namespace GestaoDeEquipamentos.ConsoleApp;
 
@@ -7,28 +9,17 @@ class Program
 {
     static void Main(string[] args)
     {
-        TelaPrincipal telaPrincipal = new TelaPrincipal();
+        // criando um servidor web
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-        while (true)
-        {
-            telaPrincipal.ApresentarMenuPrincipal();
+        builder.Services.AddControllers();
 
-            ITelaCrud telaSelecionada = telaPrincipal.ObterTela();
+        WebApplication app = builder.Build();       
 
-            char opcaoEscolhida = telaSelecionada.ApresentarMenu();
+        app.MapControllers();
 
-            switch (opcaoEscolhida)
-            {
-                case '1': telaSelecionada.CadastrarRegistro(); break;
-
-                case '2': telaSelecionada.EditarRegistro(); break;
-
-                case '3': telaSelecionada.ExcluirRegistro(); break;
-
-                case '4': telaSelecionada.VisualizarRegistros(true); break;
-
-                default: break;
-            }
-        }
+        app.Run();
     }
+
+    
 }
